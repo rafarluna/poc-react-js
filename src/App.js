@@ -1,21 +1,26 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
-import './App.css';
+import { withStyles } from '@material-ui/core/styles';
+import withRoot from './withRoot';
+
+import Button from '@material-ui/core/Button';
+
+
+const styles = theme => ({
+  root: {
+    textAlign: 'center',
+    paddingTop: theme.spacing.unit * 20,
+  },
+});
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
+        <Button variant="contained" color="primary">
+          Super Secret Password
+        </Button>  
     );
   }
 }
 
-export default App;
+export default withRoot(withStyles(styles)(App));
