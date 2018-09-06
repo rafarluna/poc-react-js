@@ -15,6 +15,8 @@ import Badge from '@material-ui/core/Badge';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import { mainListItems } from './listItems';
+import SimpleTabs from './components/tabs';
 
 const drawerWidth = 240;
 
@@ -96,10 +98,33 @@ class App extends Component {
 
   state = {
     open: true,
+    tabs: [
+      {
+        id: 0,
+        label: 'Tab 1',
+        content: 'Mi contenido 1',
+      },
+      {
+        id: 1,
+        label: 'Tab 2',
+        content: 'Mi contenido 2',
+      }
+    ],
   };
 
   handleDrawerOpen = () => {
     this.setState({ open: true });
+  };
+
+  handleAddTab = () => {
+    const newTab = {
+      id: this.state.tabs.length + 1,
+      label: 'Tab ' + this.state.tabs.length + 1,
+      content: 'Content ' + this.state.tabs.length + 1,
+    }
+    const currentTabs = this.state.tabs;
+    this.setState({ tabs: currentTabs.concat([newTab]) });
+    //this.setState({tabs: [...currentTabs, ...[newTab]]});
   };
 
   handleDrawerClose = () => {
@@ -110,68 +135,62 @@ class App extends Component {
     const { classes } = this.props;
 
     return (
-       <React.Fragment>
+      <React.Fragment>
         <div className={classes.root}>
-            <AppBar
-                position="absolute"
-                className={classNames(classes.appBar, this.state.open && classes.appBarShift)}
-                >
-                <Toolbar disableGutters={!this.state.open} className={classes.toolbar}>
-                <IconButton
+          <AppBar
+            position="absolute"
+            className={classNames(classes.appBar, this.state.open && classes.appBarShift)}
+          >
+            <Toolbar disableGutters={!this.state.open} className={classes.toolbar}>
+              <IconButton
                 color="inherit"
                 aria-label="Open drawer"
                 onClick={this.handleDrawerOpen}
                 className={classNames(
-                    classes.menuButton,
-                    this.state.open && classes.menuButtonHidden,
+                  classes.menuButton,
+                  this.state.open && classes.menuButtonHidden,
                 )}
-                >
+              >
                 <MenuIcon />
-                </IconButton>
-                <Typography variant="title" color="inherit" noWrap className={classes.title}>
+              </IconButton>
+              <Typography variant="title" color="inherit" noWrap className={classes.title}>
                 Dashboard
-                </Typography>
-                <IconButton color="inherit">
+              </Typography>
+              <IconButton color="inherit">
                 <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
+                  <NotificationsIcon />
                 </Badge>
-                </IconButton>
-                </Toolbar>
-            </AppBar>
-            <Drawer
-                variant="permanent"
-                classes={{
-                    paper: classNames(classes.drawerPaper, !this.state.open && classes.drawerPaperClose),
-                }}
-                open={this.state.open}
-                >
-                <div className={classes.toolbarIcon}>
-                <IconButton onClick={this.handleDrawerClose}>
+              </IconButton>
+            </Toolbar>
+          </AppBar>
+          <Drawer
+            variant="permanent"
+            classes={{
+              paper: classNames(classes.drawerPaper, !this.state.open && classes.drawerPaperClose),
+            }}
+            open={this.state.open}
+          >
+            <div className={classes.toolbarIcon}>
+              <IconButton onClick={this.handleDrawerClose}>
                 <ChevronLeftIcon />
-                </IconButton>
-                </div>
-                <Divider />
-                {/*<List>{mainListItems}</List>*/}
-                <Divider />
-                {/*<List>{secondaryListItems}</List>*/}
-            </Drawer>
-            <main className={classes.content}>
-                <div className={classes.appBarSpacer} />
-                <Typography variant="display1" gutterBottom>
-                Orders
-                </Typography>
-                <Typography component="div" className={classes.chartContainer}>
-                {/*<SimpleLineChart />*/}
-                </Typography>
-                <Typography variant="display1" gutterBottom>
-                Products
-                </Typography>
-                <div className={classes.tableContainer}>
-                {/*<SimpleTable />*/}
-                </div>
-            </main>
+              </IconButton>
+            </div>
+            <Divider />
+            {/*<List>{mainListItems}</List>*/}
+            <List>{mainListItems}</List>
+            <Divider />
+            {/*<List>{secondaryListItems}</List>*/}
+          </Drawer>
+          <main className={classes.content}>
+            <div className={classes.appBarSpacer} />
+            <SimpleTabs tabs={this.state.tabs} />
+            <button onClick={this.handleAddTab}>Add</button>
+            <div className={classes.tableContainer}>
+              {/*<SimpleTable />*/}
+            </div>
+          </main>
         </div>
-       </React.Fragment>
+      </React.Fragment>
     );
   }
 }
